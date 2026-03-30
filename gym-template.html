@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRONFORGE GYM — Forge Your Legacy</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #080808;
+    --charcoal: #111111;
+    --card: #161616;
+    --border: #222222;
+    --red: #E8181A;
+    --red-dark: #b01214;
+    --red-glow: rgba(232,24,26,0.3);
+    --white: #F5F0EB;
+    --muted: #888;
+    --gold: #C9A84C;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--red);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border: 1px solid rgba(232,24,26,0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.12s ease;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 4rem;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.98) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    padding: 0.7rem 1.8rem;
+    cursor: none;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 80% at 70% 50%, rgba(232,24,26,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+  .hero-lines {
+    position: absolute; inset: 0;
+    background-image: 
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 80px);
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 10rem 4rem 6rem 5rem;
+    position: relative; z-index: 2;
+  }
+  .hero-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--red);
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 9vw, 8.5rem);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+  }
+  .hero-title .line2 { color: var(--red); }
+  .hero-title .line3 {
+    -webkit-text-stroke: 1px rgba(245,240,235,0.3);
+    color: transparent;
+  }
+  .hero-desc {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 420px;
+    margin-bottom: 3rem;
+  }
+  .hero-actions { display: flex; gap: 1.2rem; align-items: center; }
+  .btn-primary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: var(--red);
+    color: var(--white);
+    border: none;
+    padding: 1rem 2.5rem;
+    cursor: none;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  .btn-primary:hover::after { transform: translateX(0); }
+  .btn-secondary {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--border);
+    padding: 1rem 2.5rem;
+    cursor: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--muted); }
+  .hero-right {
+    position: relative; z-index: 2;
+    display: flex; align-items: flex-end; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-image-frame {
+    width: 100%; height: 100%;
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .hero-image-frame::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+  }
+  .hero-placeholder {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1rem;
+    opacity: 0.15;
+  }
+  .hero-placeholder svg { width: 80px; height: 80px; fill: var(--white); }
+  .hero-placeholder p {
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 4px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+  .hero-stats {
+    position: absolute; bottom: 3rem; left: 4rem;
+    display: flex; gap: 3rem; z-index: 3;
+  }
+  .stat { display: flex; flex-direction: column; }
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    line-height: 1;
+    color: var(--white);
+  }
+  .stat-number span { color: var(--red); }
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+  .hero-scroll {
+    position: absolute; bottom: 3rem; right: 4rem; z-index: 3;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  }
+  .hero-scroll span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.7); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    overflow: hidden;
+    background: var(--red);
+    padding: 0.9rem 0;
+    border-top: 1px solid var(--red-dark);
+    border-bottom: 1px solid var(--red-dark);
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 4px;
+    color: rgba(245,240,235,0.9);
+    padding: 0 2.5rem;
+    display: flex; align-items: center; gap: 2.5rem;
+  }
+  .marquee-item::after {
+    content: '●';
+    font-size: 0.4rem;
+    opacity: 0.5;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SECTION COMMON */
+  section { padding: 7rem 5rem; }
+  .section-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .section-tag::before {
+    content: '';
+    display: block;
+    width: 30px; height: 1px;
+    background: var(--red);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 4.5rem);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+
+  /* SERVICES */
+  .services { background: var(--charcoal); }
+  .services-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem;
+  }
+  .services-header-left { max-width: 500px; }
+  .services-desc { color: var(--muted); line-height: 1.8; font-size: 0.95rem; }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    background: var(--border);
+  }
+  .service-card {
+    background: var(--card);
+    padding: 2.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card:hover { background: #1a1a1a; }
+  .service-icon {
+    width: 48px; height: 48px;
+    margin-bottom: 1.5rem;
+    color: var(--red);
+  }
+  .service-icon svg { width: 100%; height: 100%; }
+  .service-number {
+    position: absolute; top: 2rem; right: 2rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4rem;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+  }
+  .service-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.8rem;
+  }
+  .service-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+  .service-link {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 1rem; }
+
+  /* TRAINERS */
+  .trainers { background: var(--black); }
+  .trainers-header { margin-bottom: 4rem; }
+  .trainers-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .trainer-card {
+    background: var(--card);
+    overflow: hidden;
+    cursor: none;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .trainer-card:hover { background: #1a1a1a; }
+  .trainer-img {
+    width: 100%; aspect-ratio: 3/4;
+    background: linear-gradient(160deg, #1e1e1e 0%, #111 100%);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .trainer-img::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, var(--card) 0%, transparent 50%);
+  }
+  .trainer-img-placeholder {
+    opacity: 0.08;
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  }
+  .trainer-img-placeholder svg { width: 60px; height: 60px; fill: white; }
+  .trainer-img-placeholder span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: white;
+  }
+  .trainer-tag {
+    position: absolute; top: 1rem; left: 1rem; z-index: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: var(--red);
+    color: white;
+    padding: 0.3rem 0.7rem;
+  }
+  .trainer-info { padding: 1.5rem; }
+  .trainer-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.2rem;
+  }
+  .trainer-role {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* PRICING */
+  .pricing { background: var(--charcoal); }
+  .pricing-header { text-align: center; margin-bottom: 4rem; }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    max-width: 1000px; margin: 0 auto;
+  }
+  .price-card {
+    background: var(--card);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .price-card.featured {
+    background: var(--red);
+    transform: scaleY(1.02);
+    z-index: 1;
+  }
+  .price-card:not(.featured):hover { background: #1a1a1a; }
+  .price-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: var(--gold);
+    color: var(--black);
+    padding: 0.3rem 0.8rem;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+  .price-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 4.5rem;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .price-amount sup { font-size: 1.5rem; vertical-align: top; margin-top: 0.8rem; display: inline-block; }
+  .price-period {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 2.5rem;
+  }
+  .price-features { list-style: none; margin-bottom: 2.5rem; }
+  .price-features li {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: center; gap: 0.8rem;
+    color: rgba(245,240,235,0.7);
+  }
+  .price-card.featured .price-features li { color: rgba(245,240,235,0.9); border-color: rgba(255,255,255,0.15); }
+  .price-features li::before {
+    content: '—';
+    color: var(--red);
+    font-size: 0.75rem;
+  }
+  .price-card.featured .price-features li::before { color: rgba(255,255,255,0.6); }
+  .btn-plan {
+    width: 100%;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 1rem;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: transparent;
+    color: var(--white);
+    cursor: none;
+    transition: all 0.2s;
+  }
+  .price-card.featured .btn-plan {
+    background: var(--black);
+    border-color: var(--black);
+    color: var(--white);
+  }
+  .btn-plan:hover { background: var(--red); border-color: var(--red); }
+  .price-card.featured .btn-plan:hover { background: var(--charcoal); border-color: var(--charcoal); }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--black); overflow: hidden; }
+  .testimonials-header { margin-bottom: 4rem; }
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+  }
+  .testimonial-card {
+    background: var(--card);
+    padding: 2.5rem;
+    position: relative;
+    cursor: none;
+    transition: background 0.3s;
+  }
+  .testimonial-card:hover { background: #1a1a1a; }
+  .quote-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    line-height: 0.7;
+    color: var(--red);
+    opacity: 0.2;
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .testimonial-text {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: rgba(245,240,235,0.75);
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+  .testimonial-author { display: flex; align-items: center; gap: 1rem; }
+  .author-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--red);
+    border: 1px solid var(--border);
+  }
+  .author-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+  .author-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 0.15rem;
+  }
+  .stars { color: var(--gold); font-size: 0.75rem; margin-bottom: 0.3rem; }
+
+  /* SCHEDULE */
+  .schedule { background: var(--charcoal); }
+  .schedule-header { margin-bottom: 3rem; }
+  .schedule-table { width: 100%; border-collapse: collapse; }
+  .schedule-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 1rem 1.5rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .schedule-table td {
+    padding: 1.2rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    color: rgba(245,240,235,0.8);
+    transition: background 0.2s;
+  }
+  .schedule-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .class-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+  .class-badge {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    margin-left: 0.5rem;
+  }
+  .badge-red { background: rgba(232,24,26,0.15); color: var(--red); }
+  .badge-gold { background: rgba(201,168,76,0.15); color: var(--gold); }
+  .intensity-dots { display: flex; gap: 4px; }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border);
+  }
+  .dot.active { background: var(--red); }
+
+  /* CTA */
+  .cta-section {
+    background: var(--black);
+    padding: 8rem 5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(232,24,26,0.05) 0%, transparent 70%);
+  }
+  .cta-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1rem;
+  }
+  .cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    line-height: 0.95;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+  }
+  .cta-title span { color: var(--red); }
+  .cta-sub {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+    max-width: 400px;
+  }
+  .cta-form { display: flex; flex-direction: column; gap: 1rem; position: relative; z-index: 1; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-input {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 1rem 1.2rem;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: none;
+    width: 100%;
+  }
+  .form-input::placeholder { color: var(--muted); }
+  .form-input:focus { border-color: var(--red); }
+  .form-select {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--white);
+    padding: 1rem 1.2rem;
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    cursor: none;
+    width: 100%;
+    appearance: none;
+  }
+  .form-select option { background: var(--card); }
+
+  /* FOOTER */
+  footer {
+    background: #050505;
+    padding: 5rem 5rem 3rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 4rem;
+  }
+  .footer-brand {}
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+    color: var(--white);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .footer-logo span { color: var(--red); }
+  .footer-brand-desc {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 280px;
+    margin-bottom: 2rem;
+  }
+  .social-links { display: flex; gap: 0.8rem; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+    cursor: none;
+  }
+  .social-link:hover { border-color: var(--red); color: var(--red); }
+  .footer-col-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+  .footer-links a {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .footer-copy {
+    font-size: 0.78rem;
+    color: rgba(136,136,136,0.5);
+    letter-spacing: 1px;
+  }
+  .footer-copy span { color: var(--red); }
+
+  /* ANIMATIONS */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 1024px) {
+    nav { padding: 1.2rem 2rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 2rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .hero-left { padding: 8rem 2rem 4rem; }
+    .services-header { flex-direction: column; gap: 1.5rem; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .trainers-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .price-card.featured { transform: none; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .cta-section { grid-template-columns: 1fr; padding: 5rem 2rem; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">IRON<span>FORGE</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#trainers">Trainers</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#schedule">Schedule</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Join Now</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-left fade-up">
+    <div class="hero-tag">Est. 2015 — Bengaluru's #1 Gym</div>
+    <h1 class="hero-title">
+      <span class="line1">FORGE</span><br>
+      <span class="line2">YOUR</span><br>
+      <span class="line3">LEGEND</span>
+    </h1>
+    <p class="hero-desc">Elite training facility built for those who refuse to settle. Transform your body, sharpen your mind, and forge the version of yourself you've always known was possible.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Start Free Trial</a>
+      <a href="#services" class="btn-secondary">View Services</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-image-frame">
+      <div class="hero-placeholder">
+        <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+        <p>Client Photo Here</p>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-number">5000<span>+</span></div>
+      <div class="stat-label">Members Strong</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">15<span>+</span></div>
+      <div class="stat-label">Elite Trainers</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">8<span>Y</span></div>
+      <div class="stat-label">Years of Legacy</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item">Strength Training</div>
+    <div class="marquee-item">CrossFit</div>
+    <div class="marquee-item">Personal Training</div>
+    <div class="marquee-item">Yoga & Flexibility</div>
+    <div class="marquee-item">Nutrition Coaching</div>
+    <div class="marquee-item">Cardio Zone</div>
+    <div class="marquee-item">HIIT Classes</div>
+    <div class="marquee-item">Boxing</div>
+    <div class="marquee-item">Open 24/7</div>
+    <div class="marquee-item">Strength Training</div>
+    <div class="marquee-item">CrossFit</div>
+    <div class="marquee-item">Personal Training</div>
+    <div class="marquee-item">Yoga & Flexibility</div>
+    <div class="marquee-item">Nutrition Coaching</div>
+    <div class="marquee-item">Cardio Zone</div>
+    <div class="marquee-item">HIIT Classes</div>
+    <div class="marquee-item">Boxing</div>
+    <div class="marquee-item">Open 24/7</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-header fade-up">
+    <div class="services-header-left">
+      <div class="section-tag">What We Offer</div>
+      <h2 class="section-title">ELITE TRAINING<br>PROGRAMS</h2>
+    </div>
+    <p class="services-desc">Every program is engineered for results. Whether you're starting from zero or pushing past your limits — we have the infrastructure and expertise to take you there.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card fade-up">
+      <div class="service-number">01</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+      </div>
+      <div class="service-name">Strength Training</div>
+      <p class="service-desc">State-of-the-art free weights, Olympic platforms, and progressive overload systems designed to build raw, functional strength.</p>
+      <a href="#" class="service-link">Explore Program →</a>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-number">02</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.49 5.48c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg>
+      </div>
+      <div class="service-name">Personal Training</div>
+      <p class="service-desc">1-on-1 sessions with certified coaches who build custom programs tailored to your body, goals, and timeline.</p>
+      <a href="#" class="service-link">Explore Program →</a>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-number">03</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+      </div>
+      <div class="service-name">HIIT & Cardio</div>
+      <p class="service-desc">High-intensity interval classes that torch calories, improve conditioning, and keep your metabolism elevated long after the workout ends.</p>
+      <a href="#" class="service-link">Explore Program →</a>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-number">04</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/></svg>
+      </div>
+      <div class="service-name">Yoga & Recovery</div>
+      <p class="service-desc">Dedicated recovery studio with yoga, mobility work, and stretching programs that keep your body performing at its peak.</p>
+      <a href="#" class="service-link">Explore Program →</a>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-number">05</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.5 9.5c0-3.58-2.92-6.5-6.5-6.5S5.5 5.92 5.5 9.5c0 2.7 1.65 5 4.04 6.08L9 17h6l-.54-1.42C16.85 14.5 18.5 12.2 18.5 9.5zM9 19h6v1H9zm3 3c.55 0 1-.45 1-1h-2c0 .55.45 1 1 1z"/></svg>
+      </div>
+      <div class="service-name">Nutrition Coaching</div>
+      <p class="service-desc">Expert nutrition plans crafted by certified dietitians to fuel your training, accelerate recovery, and optimize body composition.</p>
+      <a href="#" class="service-link">Explore Program →</a>
+    </div>
+    <div class="service-card fade-up">
+      <div class="service-number">06</div>
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zM13 17h-3v-2h3v2zm0-4H10V7h3v6z"/></svg>
+      </div>
+      <div class="service-name">Boxing & MMA</div>
+      <p class="service-desc">Professional boxing and mixed martial arts training for all levels — from complete beginners to competitive fighters looking for an edge.</p>
+      <a href="#" class="service-link">Explore Program →</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINERS -->
+<section class="trainers" id="trainers">
+  <div class="trainers-header fade-up">
+    <div class="section-tag">The Team</div>
+    <h2 class="section-title">MEET YOUR<br>COACHES</h2>
+  </div>
+  <div class="trainers-grid">
+    <div class="trainer-card fade-up">
+      <div class="trainer-img">
+        <div class="trainer-tag">Head Coach</div>
+        <div class="trainer-img-placeholder">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Trainer Photo</span>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">ARJUN SHARMA</div>
+        <div class="trainer-role">Strength & Conditioning · 12 Years Exp.</div>
+      </div>
+    </div>
+    <div class="trainer-card fade-up">
+      <div class="trainer-img">
+        <div class="trainer-tag">CrossFit</div>
+        <div class="trainer-img-placeholder">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Trainer Photo</span>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">PRIYA MENON</div>
+        <div class="trainer-role">CrossFit L3 · Nutrition Certified</div>
+      </div>
+    </div>
+    <div class="trainer-card fade-up">
+      <div class="trainer-img">
+        <div class="trainer-tag">Boxing</div>
+        <div class="trainer-img-placeholder">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Trainer Photo</span>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">RAHUL NAIR</div>
+        <div class="trainer-role">Boxing Coach · Ex-National Champion</div>
+      </div>
+    </div>
+    <div class="trainer-card fade-up">
+      <div class="trainer-img">
+        <div class="trainer-tag">Yoga</div>
+        <div class="trainer-img-placeholder">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Trainer Photo</span>
+        </div>
+      </div>
+      <div class="trainer-info">
+        <div class="trainer-name">SNEHA IYER</div>
+        <div class="trainer-role">Yoga & Mobility · 500 RYT Certified</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="pricing-header fade-up">
+    <div class="section-tag" style="justify-content:center">Investment</div>
+    <h2 class="section-title">CHOOSE YOUR<br>PROGRAM</h2>
+    <p style="color:var(--muted);font-size:0.95rem;max-width:450px;margin:0 auto;line-height:1.8;">No hidden fees. No lock-in contracts. Just results.</p>
+  </div>
+  <div class="pricing-grid fade-up">
+    <div class="price-card">
+      <div class="price-name">Starter</div>
+      <div class="price-amount"><sup>₹</sup>1,499</div>
+      <div class="price-period">Per Month</div>
+      <ul class="price-features">
+        <li>Full Gym Access</li>
+        <li>Locker Room & Showers</li>
+        <li>2 Group Classes / Month</li>
+        <li>Fitness Assessment</li>
+        <li>App Access</li>
+      </ul>
+      <button class="btn-plan">Get Started</button>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-name">Elite</div>
+      <div class="price-amount"><sup>₹</sup>3,999</div>
+      <div class="price-period">Per Month</div>
+      <ul class="price-features">
+        <li>Unlimited Gym Access</li>
+        <li>Unlimited Group Classes</li>
+        <li>4 PT Sessions / Month</li>
+        <li>Nutrition Plan</li>
+        <li>Priority Booking</li>
+        <li>Body Composition Analysis</li>
+      </ul>
+      <button class="btn-plan">Get Started</button>
+    </div>
+    <div class="price-card">
+      <div class="price-name">Pro</div>
+      <div class="price-amount"><sup>₹</sup>7,499</div>
+      <div class="price-period">Per Month</div>
+      <ul class="price-features">
+        <li>Everything in Elite</li>
+        <li>Daily PT Sessions</li>
+        <li>Custom Meal Planning</li>
+        <li>Recovery Suite Access</li>
+        <li>Supplement Guidance</li>
+        <li>24/7 Coach Messaging</li>
+      </ul>
+      <button class="btn-plan">Get Started</button>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="schedule" id="schedule">
+  <div class="schedule-header fade-up">
+    <div class="section-tag">Timetable</div>
+    <h2 class="section-title">THIS WEEK'S<br>CLASSES</h2>
+  </div>
+  <div class="fade-up">
+  <table class="schedule-table">
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Trainer</th>
+        <th>Time</th>
+        <th>Duration</th>
+        <th>Intensity</th>
+        <th>Spots</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="class-name">Morning HIIT</span><span class="class-badge badge-red">Hot</span></td>
+        <td>Priya Menon</td>
+        <td>6:00 AM — Mon, Wed, Fri</td>
+        <td>45 min</td>
+        <td><div class="intensity-dots"><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div></div></td>
+        <td>3 left</td>
+      </tr>
+      <tr>
+        <td><span class="class-name">Strength Fundamentals</span></td>
+        <td>Arjun Sharma</td>
+        <td>8:00 AM — Daily</td>
+        <td>60 min</td>
+        <td><div class="intensity-dots"><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div></td>
+        <td>8 left</td>
+      </tr>
+      <tr>
+        <td><span class="class-name">Yoga Flow</span><span class="class-badge badge-gold">New</span></td>
+        <td>Sneha Iyer</td>
+        <td>7:00 AM — Tue, Thu, Sat</td>
+        <td>50 min</td>
+        <td><div class="intensity-dots"><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></td>
+        <td>12 left</td>
+      </tr>
+      <tr>
+        <td><span class="class-name">Boxing Bootcamp</span><span class="class-badge badge-red">Hot</span></td>
+        <td>Rahul Nair</td>
+        <td>6:30 PM — Mon, Wed, Fri</td>
+        <td>60 min</td>
+        <td><div class="intensity-dots"><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div></div></td>
+        <td>2 left</td>
+      </tr>
+      <tr>
+        <td><span class="class-name">CrossFit WOD</span></td>
+        <td>Priya Menon</td>
+        <td>7:00 PM — Daily</td>
+        <td>45 min</td>
+        <td><div class="intensity-dots"><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div></div></td>
+        <td>5 left</td>
+      </tr>
+      <tr>
+        <td><span class="class-name">Weekend Endurance</span><span class="class-badge badge-gold">Weekend</span></td>
+        <td>Arjun Sharma</td>
+        <td>8:00 AM — Sat, Sun</td>
+        <td>90 min</td>
+        <td><div class="intensity-dots"><div class="dot active"></div><div class="dot active"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div></div></td>
+        <td>10 left</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="testimonials-header fade-up">
+    <div class="section-tag">Results</div>
+    <h2 class="section-title">REAL PEOPLE.<br>REAL RESULTS.</h2>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card fade-up">
+      <span class="quote-mark">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">IronForge completely changed how I see fitness. In 6 months I lost 22kg and built more strength than I thought was possible at 35. The trainers here are on another level.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">VK</div>
+        <div>
+          <div class="author-name">Vikram Krishnan</div>
+          <div class="author-sub">Lost 22kg · Member since 2023</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-up">
+      <span class="quote-mark">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">As a working mom I was skeptical I'd actually stick to it. The 6 AM HIIT classes are brutal but addictive. I've never been in this kind of shape in my life.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AP</div>
+        <div>
+          <div class="author-name">Ananya Pillai</div>
+          <div class="author-sub">Elite Member · 18 months</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card fade-up">
+      <span class="quote-mark">"</span>
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">The nutrition coaching paired with the Pro membership is insane value. I competed in my first physique competition after just 9 months here. Couldn't have done it anywhere else.</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">RS</div>
+        <div>
+          <div class="author-name">Rohan Shetty</div>
+          <div class="author-sub">Pro Member · Competitive Athlete</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / CONTACT -->
+<section class="cta-section" id="contact">
+  <div class="fade-up">
+    <div class="cta-label">Start Today</div>
+    <h2 class="cta-title">YOUR FIRST<br>STEP STARTS<br><span>RIGHT NOW</span></h2>
+    <p class="cta-sub">Claim your free 7-day trial. No credit card. No commitment. Just show up and we'll take care of the rest.</p>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;">📍 Location</div>
+        <div style="color:var(--muted);font-size:0.85rem;margin-top:0.3rem;">Koramangala, Bengaluru · 560034</div>
+      </div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;">🕐 Hours</div>
+        <div style="color:var(--muted);font-size:0.85rem;margin-top:0.3rem;">Open 24/7 — 365 Days</div>
+      </div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;">📞 Call Us</div>
+        <div style="color:var(--muted);font-size:0.85rem;margin-top:0.3rem;">+91 98765 43210</div>
+      </div>
+    </div>
+  </div>
+  <div class="cta-form fade-up">
+    <div class="form-row">
+      <input type="text" class="form-input" placeholder="Your Name">
+      <input type="tel" class="form-input" placeholder="Phone Number">
+    </div>
+    <input type="email" class="form-input" placeholder="Email Address">
+    <select class="form-select">
+      <option disabled selected>Interested In...</option>
+      <option>Starter Membership</option>
+      <option>Elite Membership</option>
+      <option>Pro Membership</option>
+      <option>Personal Training Only</option>
+      <option>Just Exploring</option>
+    </select>
+    <button class="btn-primary" style="width:100%;padding:1.2rem;font-size:0.9rem;">Claim Free 7-Day Trial →</button>
+    <p style="font-size:0.75rem;color:var(--muted);text-align:center;">No credit card required · Cancel anytime</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="footer-logo">IRON<span>FORGE</span></span>
+      <p class="footer-brand-desc">Bengaluru's most results-driven fitness facility. Built for those who train with purpose and live without limits.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">in</a>
+        <a href="#" class="social-link">ig</a>
+        <a href="#" class="social-link">yt</a>
+        <a href="#" class="social-link">fb</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Programs</div>
+      <ul class="footer-links">
+        <li><a href="#">Strength Training</a></li>
+        <li><a href="#">HIIT Classes</a></li>
+        <li><a href="#">Personal Training</a></li>
+        <li><a href="#">Yoga & Recovery</a></li>
+        <li><a href="#">Boxing</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Trainers</a></li>
+        <li><a href="#">Success Stories</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Support</div>
+      <ul class="footer-links">
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Membership Terms</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Refund Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 <span>IronForge Gym</span>. All rights reserved.</div>
+    <div class="footer-copy">Forged in Bengaluru. Built for <span>Champions</span>.</div>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+  document.querySelectorAll('button, a, .service-card, .trainer-card, .price-card, .testimonial-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; ring.style.width = '50px'; ring.style.height = '50px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.width = '12px'; cursor.style.height = '12px'; ring.style.width = '36px'; ring.style.height = '36px'; });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Smooth active nav
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    if (window.scrollY > 50) nav.style.background = 'rgba(8,8,8,0.97)';
+    else nav.style.background = 'linear-gradient(to bottom, rgba(8,8,8,0.98) 0%, transparent 100%)';
+  });
+</script>
+</body>
+</html>
